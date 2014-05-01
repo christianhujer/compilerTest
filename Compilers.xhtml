@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<?xml-stylesheet type="text/xsl" href="#style"?>
+<html
+    xml:lang="en"
+    xmlns="http://www.w3.org/1999/xhtml"
+>
+    <head>
+        <title>Compilers</title>
+        <xsl:stylesheet
+            version="1.0"
+            xml:id="style"
+            xmlns:html="http://www.w3.org/1999/xhtml"
+            xmlns="http://www.w3.org/1999/xhtml"
+            xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+        >
+            <xsl:template match="html:compiler">
+                <h2><xsl:value-of select="@name"/></h2>
+                <h4>Links</h4>
+                <xsl:if test="html:a">
+                    <ul>
+                        <xsl:for-each select="html:a">
+                            <li>
+                                <xsl:value-of select="@title" />
+                                <xsl:text>: </xsl:text>
+                                <xsl:apply-templates select="." />
+                            </li>
+                        </xsl:for-each>
+                    </ul>
+                </xsl:if>
+            </xsl:template>
+            <xsl:template match="@*|node()">
+                <xsl:copy>
+                    <xsl:apply-templates select="@*|node()" />
+                </xsl:copy>
+            </xsl:template>
+        </xsl:stylesheet>
+    </head>
+    <body>
+        <h1>Compilers</h1>
+        <compiler name="GCC">
+            <a title="Manufacturer" href="http://www.fsf.org/">Free Software Foundation</a>
+            <a title="Product" href="http://gcc.gnu.org/">GCC Homepage</a>
+            <a title="Manual" href="http://gcc.gnu.org/onlinedocs/gcc/">GCC Manual</a>
+        </compiler>
+        <compiler name="armcc">
+            <a title="Manufacturer" href="http://www.keil.com/">Keil / ARM</a>
+            <a title="Product" href="http://www.keil.com/arm/mdk.asp">MDK-ARM</a>
+            <a title="Manual" href="http://www.keil.com/arm/man/arm.htm">ARM Product Manuals</a>
+        </compiler>
+        <compiler name="Cx51">
+            <a title="Manufacturer" href="http://www.keil.com/">Keil / ARM</a>
+            <a title="Product" href="http://www.keil.com/c51/">MDK-C51</a>
+            <a title="Manual" href="http://www.keil.com/c51/man/c51.htm">C51 Product Manuals</a>
+        </compiler>
+        <compiler name="C251">
+            <a title="Manufacturer" href="http://www.keil.com/">Keil / ARM</a>
+            <a title="Product" href="http://www.keil.com/c251/">MDK-C251</a>
+            <a title="Manual" href="http://www.keil.com/c251/man/c251.htm">C251 Product Manuals</a>
+        </compiler>
+        <compiler name="C166">
+            <a title="Manufacturer" href="http://www.keil.com/">Keil / ARM</a>
+            <a title="Product" href="http://www.keil.com/c166/">MDK-C166</a>
+            <a title="Manual" href="http://www.keil.com/c166/man/c166.htm">C166 Product Manuals</a>
+        </compiler>
+    </body>
+</html>
