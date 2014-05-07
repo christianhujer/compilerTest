@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<?xml-stylesheet type="text/xsl" href="#style"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+    <head>
+        <title>Compiler Keywords</title>
+        <xsl:stylesheet
+            version="1.0"
+            xml:id="style"
+            xmlns:html="http://www.w3.org/1999/xhtml"
+            xmlns="http://www.w3.org/1999/xhtml"
+            xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+        >
+            <xsl:template match="html:keywords">
+                <table border="1">
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <xsl:for-each select="html:keyword/html:language">
+                            <xsl:if test="not(preceding::html:language[text() = current()/text()])">
+                                <td>
+                                    <xsl:value-of select="." />
+                                </td>
+                            </xsl:if>
+                        </xsl:for-each>
+                    </tr>
+                    <xsl:apply-templates />
+                </table>
+            </xsl:template>
+            <xsl:template match="html:keyword">
+                <tr>
+                    <td><xsl:value-of select="@name" /></td>
+                    <td><xsl:value-of select="@type" /></td>
+                </tr>
+            </xsl:template>
+            <xsl:template match="@*|node()">
+                <xsl:copy>
+                    <xsl:apply-templates select="@*|node()" />
+                </xsl:copy>
+            </xsl:template>
+        </xsl:stylesheet>
+    </head>
+    <body>
+        <h1>Compiler Keywords</h1>
+        <keywords>
+            <keyword name="auto" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="break" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="case" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="char" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="const" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="continue" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="default" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="do" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="double" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="else" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="enum" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="extern" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="float" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="for" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="goto" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="if" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="inline" type="keyword">
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="int" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="long" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="register" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="restrict" type="keyword">
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="return" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="short" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="signed" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="sizeof" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="static" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="struct" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="switch" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="typedef" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="union" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="unsigned" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="void" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="volatile" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="while" type="keyword">
+                <language>C89</language>
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="_Alignas" type="keyword">
+                <language>C11</language>
+            </keyword>
+            <keyword name="_Alignof" type="keyword">
+                <language>C11</language>
+            </keyword>
+            <keyword name="_Atomic" type="keyword">
+                <language>C11</language>
+            </keyword>
+            <keyword name="_Bool" type="keyword">
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="_Complex" type="keyword">
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="_Generic" type="keyword">
+                <language>C11</language>
+            </keyword>
+            <keyword name="_Imaginary" type="keyword">
+                <language>C99</language>
+                <language>C11</language>
+            </keyword>
+            <keyword name="_Noreturn" type="keyword">
+                <language>C11</language>
+            </keyword>
+            <keyword name="_Statuc_assert" type="keyword">
+                <language>C11</language>
+            </keyword>
+            <keyword name="_Thread_local" type="keyword">
+                <language>C11</language>
+            </keyword>
+        </keywords>
+        <h2>References</h2>
+        <ul>
+            <li><a href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf">ISO/IEC 9899:201x (C11), A.1.2 Keywords</a></li>
+            <li><a href="http://www.open-std.org/jtc1/sc22/WG14/www/docs/n1256.pdf">ISO/IEC 9899:TC3 (C99), A.1.2 Keywords</a></li>
+            <li><a href="http://flash-gordon.me.uk/ansi.c.txt">ANSI X3J11/88-090 (C89), 3.1.1 Keywords</a></li>
+        </ul>
+    </body>
+</html>
