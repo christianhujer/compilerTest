@@ -13,25 +13,81 @@
         >
             <xsl:template match="html:keywords">
                 <table border="1">
-                    <tr>
-                        <th>Name</th>
-                        <th>Type</th>
-                        <xsl:for-each select="html:keyword/html:language">
-                            <xsl:if test="not(preceding::html:language[text() = current()/text()])">
-                                <td>
-                                    <xsl:value-of select="." />
-                                </td>
-                            </xsl:if>
-                        </xsl:for-each>
-                    </tr>
-                    <xsl:apply-templates />
+                    <thead>
+                        <tr>
+                            <th rowspan="3">Name</th>
+                            <th rowspan="3">Type</th>
+                            <th colspan="3">Language</th>
+                            <th colspan="3">Compiler</th>
+                        </tr>
+                        <tr>
+                            <th>ANSI</th>
+                            <th colspan="2">ISO</th>
+                            <th colspan="3">Keil</th>
+                        </tr>
+                        <tr>
+                            <th>C89</th>
+                            <th>C99</th>
+                            <th>C11</th>
+                            <th>C166</th>
+                            <th>Cx51</th>
+                            <th>C251</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <xsl:apply-templates />
+                    </tbody>
                 </table>
             </xsl:template>
+            <xsl:template name="if">
+                <xsl:param name="language" />
+                <td>
+                    <xsl:choose>
+                        <xsl:when test="$language">
+                            <xsl:attribute name="style">background-color: #afa;</xsl:attribute>
+                            <xsl:text>yes</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="style">background-color: #faa;</xsl:attribute>
+                            <xsl:text>no</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </td>
+            </xsl:template>
             <xsl:template match="html:keyword">
+                <xsl:variable name="keyword" select="@name" />
+                <xsl:variable name="type" select="@type" />
                 <tr>
-                    <td><xsl:value-of select="@name" /></td>
+                    <td><code><xsl:value-of select="$keyword" /></code></td>
                     <td><xsl:value-of select="@type" /></td>
+                    <xsl:for-each select="//html:keywords/html:supportlist/html:supported">
+                        <xsl:apply-templates select="//html:keywords/html:keyword[@name=$keyword]/html:supported[@in = current()/@in]" />
+                        <xsl:if test="not(//html:keywords/html:keyword[@name=$keyword]/html:supported[@in = current()/@in])">
+                            <xsl:choose>
+                                <xsl:when test="(@in = 'C89' or @in = 'C99' or @in = 'C11') and $type = 'proprietary'">
+                                    <td style="background-color: #faa;">no</td>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <td>???</td>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:if>
+                    </xsl:for-each>
                 </tr>
+            </xsl:template>
+            <xsl:template match="html:supportlist" />
+            <xsl:template match="html:supported">
+                <xsl:choose>
+                    <xsl:when test="@value='true'">
+                        <td style="background-color: #afa;">yes</td>
+                    </xsl:when>
+                    <xsl:when test="@value='false'">
+                        <td style="background-color: #faa;">no</td>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <td>???</td>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:template>
             <xsl:template match="@*|node()">
                 <xsl:copy>
@@ -43,206 +99,350 @@
     <body>
         <h1>Compiler Keywords</h1>
         <keywords>
+            <supportlist>
+                <supported in="C89" />
+                <supported in="C99" />
+                <supported in="C11" />
+                <supported in="C166" />
+                <supported in="Cx51" />
+                <supported in="C251" />
+            </supportlist>
             <keyword name="auto" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="break" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="case" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="char" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="const" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="continue" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="default" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="do" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="double" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="else" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="enum" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="extern" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="float" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="for" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="goto" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="if" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="inline" type="keyword">
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="false" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="int" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="long" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="register" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="restrict" type="keyword">
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="false" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="return" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="short" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="signed" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="sizeof" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="static" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="struct" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="switch" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="typedef" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="union" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="unsigned" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="void" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="volatile" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="while" type="keyword">
-                <language>C89</language>
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="true" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="_Alignas" type="keyword">
-                <language>C11</language>
+                <supported in="C89" value="false" />
+                <supported in="C99" value="false" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="_Alignof" type="keyword">
-                <language>C11</language>
+                <supported in="C89" value="false" />
+                <supported in="C99" value="false" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="_Atomic" type="keyword">
-                <language>C11</language>
+                <supported in="C89" value="false" />
+                <supported in="C99" value="false" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="_Bool" type="keyword">
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="false" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="_Complex" type="keyword">
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="false" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="_Generic" type="keyword">
-                <language>C11</language>
+                <supported in="C89" value="false" />
+                <supported in="C99" value="false" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="_Imaginary" type="keyword">
-                <language>C99</language>
-                <language>C11</language>
+                <supported in="C89" value="false" />
+                <supported in="C99" value="true" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="_Noreturn" type="keyword">
-                <language>C11</language>
+                <supported in="C89" value="false" />
+                <supported in="C99" value="false" />
+                <supported in="C11" value="true" />
             </keyword>
-            <keyword name="_Statuc_assert" type="keyword">
-                <language>C11</language>
+            <keyword name="_Static_assert" type="keyword">
+                <supported in="C89" value="false" />
+                <supported in="C99" value="false" />
+                <supported in="C11" value="true" />
             </keyword>
             <keyword name="_Thread_local" type="keyword">
-                <language>C11</language>
+                <supported in="C89" value="false" />
+                <supported in="C99" value="false" />
+                <supported in="C11" value="true" />
+            </keyword>
+            <keyword name="__asm" type="proprietary">
+                <supported in="C166" value="true" />
+            </keyword>
+            <keyword name="__attribute__" type="proprietary">
+                <supported in="C251" value="true" />
+            </keyword>
+            <keyword name="_at_" type="proprietary">
+                <supported in="Cx51" value="true" />
+                <supported in="C251" value="true" />
+            </keyword>
+            <keyword name="alien" type="proprietary">
+                <supported in="Cx51" value="true" />
+                <supported in="C251" value="true" />
+            </keyword>
+            <keyword name="bdata" type="proprietary">
+                <supported in="C166" value="true" />
+                <supported in="Cx51" value="true" />
+                <supported in="C251" value="true" />
+            </keyword>
+            <keyword name="bit" type="proprietary">
+                <supported in="C166" value="true" />
+                <supported in="Cx51" value="true" />
+                <supported in="C251" value="true" />
+            </keyword>
+            <keyword name="code" type="proprietary">
+                <supported in="Cx51" value="true" />
+                <supported in="C251" value="true" />
+            </keyword>
+            <keyword name="compact" type="proprietary">
+                <supported in="Cx51" value="true" />
+                <supported in="C251" value="true" />
+            </keyword>
+            <keyword name="data" type="proprietary">
+                <supported in="Cx51" value="true" />
+                <supported in="C251" value="true" />
+            </keyword>
+            <keyword name="ebdata" type="proprietary">
+                <supported in="C166" value="true" />
+            </keyword>
+            <keyword name="far" type="proprietary">
+                <supported in="C166" value="true" />
+                <supported in="Cx51" value="true" />
+                <supported in="C251" value="true" />
+            </keyword>
+            <keyword name="huge" type="proprietary">
+                <supported in="C166" value="true" />
+            </keyword>
+            <keyword name="idata" type="proprietary">
+                <supported in="C166" value="true" />
+                <supported in="Cx51" value="true" />
+                <supported in="C251" value="true" />
+            </keyword>
+            <keyword name="interrupt" type="proprietary">
+                <supported in="C166" value="true" />
+                <supported in="Cx51" value="true" />
+                <supported in="C251" value="true" />
+            </keyword>
+            <keyword name="__inline" type="proprietary">
+                <supported in="C166" value="true" />
+            </keyword>
+            <keyword name="large" type="proprietary">
+                <supported in="Cx51" value="true" />
+                <supported in="C251" value="true" />
+            </keyword>
+            <keyword name="near" type="proprietary">
+                <supported in="C166" value="true" />
+            </keyword>
+            <keyword name="pdata" type="proprietary">
+                <supported in="Cx51" value="true" />
+                <supported in="C251" value="true" />
+            </keyword>
+            <keyword name="_priority_" type="proprietary">
+                <supported in="Cx51" value="true" />
+                <supported in="C251" value="true" />
+            </keyword>
+            <keyword name="reentrant" type="proprietary">
+                <supported in="Cx51" value="true" />
+                <supported in="C251" value="true" />
+            </keyword>
+            <keyword name="sbit" type="proprietary">
+                <supported in="C166" value="true" />
+                <supported in="Cx51" value="true" />
+                <supported in="C251" value="true" />
+            </keyword>
+            <keyword name="sdata" type="proprietary">
+                <supported in="C166" value="true" />
+            </keyword>
+            <keyword name="sfr" type="proprietary">
+                <supported in="C166" value="true" />
+                <supported in="Cx51" value="true" />
+                <supported in="C251" value="true" />
+            </keyword>
+            <keyword name="sfr16" type="proprietary">
+                <supported in="Cx51" value="true" />
+                <supported in="C251" value="true" />
+            </keyword>
+            <keyword name="small" type="proprietary">
+                <supported in="Cx51" value="true" />
+                <supported in="C251" value="true" />
+            </keyword>
+            <keyword name="_task_" type="proprietary">
+                <supported in="C166" value="true" />
+                <supported in="Cx51" value="true" />
+                <supported in="C251" value="true" />
+            </keyword>
+            <keyword name="using" type="proprietary">
+                <supported in="C166" value="true" />
+                <supported in="Cx51" value="true" />
+                <supported in="C251" value="true" />
+            </keyword>
+            <keyword name="xdata" type="proprietary">
+                <supported in="Cx51" value="true" />
+                <supported in="C251" value="true" />
+            </keyword>
+            <keyword name="xhuge" type="proprietary">
+                <supported in="C166" value="true" />
             </keyword>
         </keywords>
         <h2>References</h2>
@@ -250,6 +450,9 @@
             <li><a href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf">ISO/IEC 9899:201x (C11), A.1.2 Keywords</a></li>
             <li><a href="http://www.open-std.org/jtc1/sc22/WG14/www/docs/n1256.pdf">ISO/IEC 9899:TC3 (C99), A.1.2 Keywords</a></li>
             <li><a href="http://flash-gordon.me.uk/ansi.c.txt">ANSI X3J11/88-090 (C89), 3.1.1 Keywords</a></li>
+            <li><a href="http://www.keil.com/support/man/docs/c166/c166_extensions.htm">Keil C166 User's Guide, Language Extensions</a></li>
+            <li><a href="http://www.keil.com/support/man/docs/c51/c51_extensions.htm">Keil Cx51 User's Guide, Language Extensions</a></li>
+            <li><a href="http://www.keil.com/support/man/docs/c251/c251_extensions.htm">Keil C251 User's Guide, Language Extensions</a></li>
         </ul>
     </body>
 </html>
