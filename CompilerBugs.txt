@@ -1,0 +1,107 @@
+Filed to Keil / ARM on armcc and its documentation on 2014-04-19:
+
+I found a few bugs in armcc and its documentation.
+
+Bug 1: Documentation for C99 insufficient.
+Subject: Documentation that option --c99 implicitly defines __STDC_HOSTED__ is missing.
+Bug in: http://www.keil.com/support/man/docs/armccref/armccref_BCFJIIJJ.htm
+Context: When using the command line option --c99, the string __STDC_HOSTED__ becomes a predefined macro with value 1.
+Expected behavior: The documentation states the fact that --c99 implies defining __STDC_HOSTED__ to 1.
+Actual behavior: The implemented relationship between --c99 and __STDC_HOSTED__ is undocumented.
+Impact: Users which want to compile multi-platform operating systems in C99 cannot find the necessary information in the compiler documentation.
+Workaround: Experiment with the compiler instead of reading the documentation.
+-> Case number 585411
+https://silver.arm.com/support/preload.tsh?wm=au&key=585411
+
+Bug 2: Documentation for predefined macros insufficient.
+Subject: In the documentation for predefined macros, __STDC_HOSTED__ is missing.
+Bug in: http://www.keil.com/support/man/docs/armccref/armccref_babjfefg.htm
+Context: When using the command line option --c99, the string __STDC_HOSTED__ becomes a predefined macro with value 1.
+Expected behavior: The documentation states the fact that __STDC_HOSTED__ might be a predefined macro.
+Actual behavior: The documentation does not mention that __STDC_HOSTED__ is predefined.
+Impact: Users which want to compile multi-platform operating systems in C99 cannot find the necessary information in the compiler documentation.
+Workaround: Experiment with the compiler instead of reading the documentation.
+-> Case number 585412
+https://silver.arm.com/support/preload.tsh?wm=au&key=585412
+
+Bug 3: Documentation for predefined macros insufficient.
+Subject: In the documentation for predefined macros, __func__ is missing.
+Bug in: http://www.keil.com/support/man/docs/armccref/armccref_babjfefg.htm
+Context: In armcc, __func__ is always defined as specified by ISO/IEC 9899:1999, even when compiling for ISO/IEC 9899:1990 (which is okay, it's an acceptable language extension).
+Expected behavior: The documentation states the fact that __func__ is a predefined macro.
+Actual behavior: The documentation does not mention that __func__ is predefined.
+Impact: Users which want to see if __func__ is predefined so that they can use it will not find it in the documentation.
+Workaround: Experiment with the compiler instead of reading the documentation.
+-> Case number 585414
+https://silver.arm.com/support/preload.tsh?wm=au&key=585414
+
+Bug 4: armcc lacks control over __STDC_HOSTED__
+Expected behavior: The user can choose whether to compile for a hosted environment (implies predefined #define __STDC_HOSTED__ 1) or a freestanding environment (implies #define __STDC_HOSTED__ 0).
+Actual behavior: No command line option exists that would control the value of __STDC_HOSTED__ and the associated behavior.
+This makes it impossible to compile a kernel in C99 that includes source code which is prepared for both, kernels and user space, and that according to C99 or C11 queries the environment using __STDC_HOSTED__ using armcc.
+
+Further information:
+
+For C99: http://www.open-std.org/jtc1/sc22/WG14/www/docs/n1256.pdf
+Page 7, 4. Conformance, paragraph 6
+Page 11ff, 5.1.2 Execution environments
+Page 160 6.10.8 Predefined macro names, paragraph 1, __STDC_HOSTED__
+
+For C89: http://flash-gordon.me.uk/ansi.c.txt
+Chapter 1.7 compliance
+Chapter 2.1.2 Execution environments
+
+For C11: http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf
+Page 8, 4. Conformance, paragraph 6
+Page 12ff, 5.1.2 Execution environments
+Page 175, 6.10.8.1 Mandatory macros, paragraph 1, __STDC_HOSTED__
+
+To see how GCC handles this:
+http://gcc.gnu.org/onlinedocs/gcc/C-Dialect-Options.html#index-fhosted-115
+http://gcc.gnu.org/onlinedocs/gcc/Standards.html#Standards
+-> Case number 585436
+https://silver.arm.com/support/preload.tsh?wm=au&key=585436
+
+Bug 5: Documentation of __VA_ARGS__ insufficient
+Subject: ##__VA_ARGS__ not documented
+Obviously, armcc supports the GCC extension over the C99 specification which removes the comma in case of an empty __VA_ARGS__, which is a very useful feature.
+http://www.keil.com/support/man/docs/armccref/armccref_caccbgji.htm
+Expected behavior: The documentation for the language extensions describes that ##__VA_ARGS__ is supported.
+Actual behavior: ##__VA_ARGS__ is an undocumented feature.
+-> Case number 585415
+https://silver.arm.com/support/preload.tsh?wm=au&key=585415
+
+Bug 6: armcc -h help text incomplete
+When running armcc -h, the help text printed is incomplete.
+Expected behavior: armcc -h prints a list of all supported command line options along with a brief description for each of them.
+Actual behavior: armcc -h only prints a small subset of the supported options.
+Workaround 1: Consult manual - which probably is incomplete either.
+Workaround 2: Analyze the binary using strings $(which armcc) | sort -u | grep '^-' and experiment with each string in that result list to find out how armcc works.
+-> Case number 585434
+https://silver.arm.com/support/preload.tsh?wm=au&key=585434
+
+Bug 7: armcc --c90 should define __STDC_HOSTED__
+When running armcc in C89/C90 mode, __STDC_HOSTED__ should also be defined for convenience.
+C89/C90 does not define __STDC_HOSTED__, it is only defined for C99 onwards.
+However, the behavior (freestanding vs. hosted) which is controlled and queried using __STDC_HOSTED__ is already described in C89/C90.
+Therefore, __STDC_HOSTED__ should also be defined for --c90, not only for --c99.
+For reference information GCC also defines __STDC_HOSTED__ for --std=c89, as the following command shows:
+cher@armor1:~/tmp$ gcc -dM -E -undef -std=c90 - </dev/null
+#define _FORTIFY_SOURCE 2
+#define __STDC_HOSTED__ 1
+#define __STDC__ 1
+-> Case number 585437
+https://silver.arm.com/support/preload.tsh?wm=au&key=585437
+
+
+
+
+Note: I was running armcc on Linux using wine.1.3.15.
+The version of armcc used was:
+Product: ARM Compiler 5.04
+Component: ARM Compiler 5.04 update 1 (build 49)
+Tool: armcc [5040049]
+
+
+Funny: First I tried the Keil website for sending the bug report. There, I got a HTTP Error 500.100 (whatever 500.100 is :).
+So I used https://silver.arm.com/support/ instead.
