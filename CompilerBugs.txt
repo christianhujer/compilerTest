@@ -93,7 +93,18 @@ cher@armor1:~/tmp$ gcc -dM -E -undef -std=c90 - </dev/null
 -> Case number 585437
 https://silver.arm.com/support/preload.tsh?wm=au&key=585437
 
+Bug 8: armcc lacks feature for printing predefined macros.
+When running gcc, it's easy to print the predefined macros by using a command line like this:
+gcc -E -dM - </dev/null
+It seems that armcc does not provide an option that does the same.
+This means that users have a hard time finding out what actually is predefined.
+Workaround 1: Consult the documentation (which probably is incomplete).
+Workaround 2: Look at the list printed by strings $(which armcc) | sort -u | grep '^__' and guess what is intrinsics, predefined macros or something else.
+TODO:2014-05-27:cher:3 Report this bug
 
+Bug 9: armcc does not distinguish between zero-initialized data and uninitialized data.
+When compiling code with armcc, it emits variables initialized with zero to .bss instead of .data.
+TODO:2014-07-06:cher:3:Report this bug
 
 
 Note: I was running armcc on Linux using wine.1.3.15.
